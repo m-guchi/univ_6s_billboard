@@ -46,6 +46,9 @@ class HttpStatusCode
 
     def change_header()
         header = "Content-Type: text/html; charset=utf-8"
+        if @status_code == 405
+            header += "\nAllow: GET, HEAD, POST"
+        end
         return header
     end
 
