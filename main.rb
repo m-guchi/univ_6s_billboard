@@ -2,6 +2,9 @@ require "socket"
 require 'logger'
 require "csv"
 require_relative "./src/router"
+require_relative "./src/post_article"
+require_relative "./src/http_status_code"
+require_relative "./src/method_evaluation"
 
 logger = Logger.new('log/request.log')
 logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
@@ -30,28 +33,41 @@ loop do
             message_header.store(key,val)
         end
         # メッセージボディ
-        message_body = request_messages.join("")
-        
-        unless message_body == ""
-            bodys = Hash.new
-            message_body.split("&").each do |m|
+        message_body = Hash.new
+        unless request_messages.join("\n") == ""
+            request_messages.join("\n").split("&").each do |m|
                 pair = m.split("=")
-                bodys.store(pair[0], CGI.unescape(pair[1]==nil ? "" : pair[1]))
-            end
-            week_list = ["日","月","火","水","木","金","土"]
-            time = Time.now.strftime("%Y/%m/%d") + "(" + week_list[Time.now.strftime("%w").to_i] + ") " + Time.now.strftime("%T")
-            name = bodys["name"]!="" ? bodys["name"] : "名無しさん"
-            no = CSV.read(__dir__ + "/data/text.csv").empty? ? 0 : CSV.read(__dir__ + "/data/text.csv").last[0].to_i+1
-            CSV.open(__dir__ + "/data/text.csv","a") do |csv|
-                csv << [no,time,name,bodys["article"].gsub(/\R/, "\n")]
+                message_body.store(pair[0], CGI.unescape(pair[1] || ""))
             end
         end
 
-        router = Router.new(request_url)
-        status, header, body = router.routing
+        unless message_body.empty?
+            PostArticle.new(message_body["name"],message_body["article"])
+        end
+
+        method_evaluation = MethodEvaluation.new(method)
+
+        if method_evaluation.is_valid
+            router = Router.new(request_url, method)
+            status_code, header, body = router.routing
+        else
+            status_code = 501
+        end
+
+        # ステータスコードで表示内容を制御
+        http_status_code = HttpStatusCode.new(status_code)
+        unless http_status_code.is_success()
+            header = http_status_code.change_header() || header
+            body = http_status_code.change_body() || body
+        end
+
+        # メソッドがHEADの場合はbody削除
+        if method_evaluation.method == "HEAD"
+            body = ""
+        end
 
         response_messages = <<~EOHTTP
-            HTTP/1.0 #{status}
+            HTTP/1.0 #{http_status_code.format_status_code}
             #{header}
 
             #{body}

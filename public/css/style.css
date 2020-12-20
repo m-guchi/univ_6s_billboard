@@ -9,7 +9,6 @@
     --button-text-color: #00473e;
     --secondary-color: #ffa8ba;
     --alert-color: #fa5246;
-
 }
 
 html, body{
@@ -91,6 +90,9 @@ main{
 
 #submit-form{
     margin: 0.5rem calc((100% - 7rem) / 2);
+}
+#submit-form:hover{
+    opacity: 0.7;
 }
 
 article{

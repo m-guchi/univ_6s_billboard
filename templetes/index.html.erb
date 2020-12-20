@@ -20,13 +20,18 @@
             </form>
         </div>
         <article>
-            <% @csv.reverse.each do |val| %>
+            <%
+                @csv.reverse.each do |val|
+                    week_list = ["日","月","火","水","木","金","土"]
+                    ori_time = Time.at(val[1].to_i/1000)
+                    time = ori_time.strftime("%Y/%m/%d(") + week_list[ori_time.strftime("%w").to_i] + ori_time.strftime(") %T")
+            %>
             <div class="article-item">
                 <div class="item-header">
                     <span class="item-number"><%= val[0] %></span>
                     <span>名前:</span>
                     <span class="item-name"><%= val[2] %></span>
-                    <span><%= val[1] %></span>
+                    <span><%= time %></span>
                 </div>
                 <div class="item-text">
                     <%= val[3].gsub(/\R/, "<br>") %>
