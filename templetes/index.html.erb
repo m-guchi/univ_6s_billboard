@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>なんでも掲示板</title>
+</head>
+<body>
+    <header>
+        <div id="header-title">なんでも掲示板</div>
+    </header>
+    <main>
+        <div id="post-article-box">
+            <form action="" method="post">
+                <label for="name-form">名前</label>
+                <input type="text" name="name" class="post-form-box" id="name-form">
+                <textarea name="article" class="post-form-box" id="article-form" required></textarea>
+                <input type="submit" id="submit-form" value="書き込む">
+            </form>
+        </div>
+        <article>
+            <% @csv.reverse.each do |val| %>
+            <div class="article-item">
+                <div class="item-header">
+                    <span class="item-number"><%= val[0] %></span>
+                    <span>名前:</span>
+                    <span class="item-name"><%= val[2] %></span>
+                    <span><%= val[1] %></span>
+                </div>
+                <div class="item-text">
+                    <%= val[3].gsub(/\R/, "<br>") %>
+                </div>
+            </div>
+            <% end %>
+        </article>
+    </main>
+</body>
+</html>
