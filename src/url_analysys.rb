@@ -21,6 +21,9 @@ class UrlAnalysis
     private:split_url
 
     def split_path(path)
+        if path == ""
+            path = "/"
+        end
         if path.end_with?("/")
             path += "index"
         end
