@@ -1,0 +1,123 @@
+@charset "UTF-8";
+
+:root{
+    --bg-color: #f2f7f5;
+    --text-color: #475d5b;
+    --head-bg-color: #00473e;
+    --head-text-color: #f2f7f5;
+    --button-bg-color: #faae2b;
+    --button-text-color: #00473e;
+    --secondary-color: #ffa8ba;
+    --alert-color: #fa5246;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+    font-size: 62.5%;
+}
+
+body{
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family:'メイリオ', 'Meiryo','ＭＳ ゴシック','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3',sans-serif;
+}
+
+form label{
+    color: var(--head-bg-color);
+    font-size: 1.3rem;
+}
+
+input, textarea{
+    border-width: 1px;
+    font-family : inherit;
+    padding: 0.2rem 0.5rem;
+}
+
+input[type="submit"]{
+    background-color: var(--button-bg-color);
+    border: none;
+    border-radius: 1.5rem;
+    color: var(--button-text-color);
+    font-size: 1.3rem;
+    padding: 0.6rem 1.4rem;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+header{
+    background-color: var(--head-bg-color);
+    color: var(--head-text-color);
+    font-size: 23px;
+    font-weight: bold;
+    height: 56px;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+}
+
+#header-title{
+    margin-top: 14px;
+}
+
+main{
+    font-size: 1.3rem;
+    position: relative;
+    top: 56px;
+}
+
+#post-article-box{
+    margin: 25px auto;
+    width: 80%;
+    max-width: 600px;
+}
+
+.post-form-box{
+    width: calc(100% - 12px);
+    margin-bottom: 0.6rem;
+}
+
+#name-form{
+    height: 1.5em;
+}
+
+#article-form{
+    height: 7.5em;
+}
+
+#submit-form{
+    margin: 0.5rem calc((100% - 7rem) / 2);
+}
+#submit-form:hover{
+    opacity: 0.7;
+}
+
+article{
+    margin: 45px auto 20px;
+    width: 85%;
+    max-width: 650px;
+}
+
+.article-item{
+    margin: 2.6rem 0;
+}
+
+.item-header{
+    color: var(--head-bg-color);
+    font-size: 1.4rem;
+}
+
+.item-number{
+    font-weight: bold;
+}
+
+.item-name{
+    font-weight: bold;
+}
+
+.item-text{
+    margin: 0.65rem 1em 0 1.5em;
+}
