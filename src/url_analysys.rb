@@ -21,11 +21,11 @@ class UrlAnalysis
     private:split_url
 
     def split_path(path)
+        if path.end_with?("/")
+            path += "index"
+        end
         if path.slice(0) == "/"
             path[0]=""
-        end
-        if path == ""
-            return ["index"]
         end
         paths = path.split("/")
         return paths ? paths : nil

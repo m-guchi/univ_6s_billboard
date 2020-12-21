@@ -16,28 +16,54 @@ class Router
     def routing
         @header = {}
         @body = ""
-        method = @method.method
         if @paths.last.end_with?(".css")
             router_css()
         else
-            if ["GET","HEAD","POST"].include?(method)
-                case @paths[0]
-                when "index"
-                    @status_code = 200
-                    @header.store("Content-Type","text/html; charset=utf-8")
-                    index_html = ERB.new(File.read(__dir__ + "/../templetes/index.html.erb"))
-                    @csv = CSV.read(__dir__ + "/../data/text.csv")
-                    @body = index_html.result(binding)
-                else
-                    @status_code = 404
-                end
-            else
-                @status_code = 405
-                @header.store("Allow","GET, HEAD, POST")
-            end
+            router_html()
+            # if ["GET","HEAD","POST"].include?(@method.method)
+            #     case @paths[0]
+            #     when "index"
+            #         @status_code = 200
+            #         @header.store("Content-Type","text/html; charset=utf-8")
+            #         index_html = ERB.new(File.read(__dir__ + "/../templetes/index.html.erb"))
+            #         @csv = CSV.read(__dir__ + "/../data/text.csv")
+            #         @body = index_html.result(binding)
+            #     else
+            #         @status_code = 404
+            #     end
+            # else
+            #     @status_code = 405
+            #     @header.store("Allow","GET, HEAD, POST")
+            # end
         end
         return @status_code, @header, @body
     end
+
+    def router_html
+        need_csv = (@paths.join("/") == "index")
+        file_path = __dir__ + "/../templetes/" + @paths.join("/") + ".html.erb"
+        unless exist_file(file_path)
+            @status_code = 404
+            return 0
+        end
+        unless ["GET","HEAD","POST"].include?(@method.method)
+            @status_code = 405
+            @header.store("Allow","GET, HEAD","POST")
+            return 0
+        end
+        controller_html(file_path, need_csv)
+    end
+
+    def controller_html(file_path, need_csv)
+        @status_code = 200
+        @header.store("Content-Type","text/html; charset=utf-8")
+        html = ERB.new(File.read(file_path))
+        if need_csv
+            @csv = CSV.read(__dir__ + "/../data/text.csv")
+        end
+        @body = html.result(binding)
+    end
+    private:controller_html
 
     def router_css
         file_path = __dir__ + "/../public/" + @paths.join("/")
