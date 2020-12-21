@@ -49,7 +49,7 @@ loop do
 
         if method_evaluation.is_valid
             router = Router.new(request_url, method)
-            status_code, header, body = router.routing
+            status_code, header_hash, body = router.routing
         else
             status_code = 501
         end
@@ -57,14 +57,18 @@ loop do
         # ステータスコードで表示内容を制御
         http_status_code = HttpStatusCode.new(status_code)
         unless http_status_code.is_success()
-            header = http_status_code.change_header() || header
-            body = http_status_code.change_body() || body
+            header_hash.merge!(http_status_code.update_error_header_list())
+            body = http_status_code.change_error_body() || body
         end
 
         # メソッドがHEADの場合はbody削除
         if method_evaluation.method == "HEAD"
             body = ""
         end
+
+        # ヘッダーを展開
+        header = header_hash.map{|key,value| [key + ": " + value]}.join("\n")
+
 
         response_messages = <<~EOHTTP
             HTTP/1.0 #{http_status_code.format_status_code}

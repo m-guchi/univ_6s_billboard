@@ -44,16 +44,14 @@ class HttpStatusCode
         return status_code + " " + status_text
     end
 
-    def change_header()
-        header = "Content-Type: text/html; charset=utf-8"
-        if @status_code == 405
-            header += "\nAllow: GET, HEAD, POST"
-        end
-        return header
+    def update_error_header_list()
+        header_list = {}
+        header_list.store("Content-Type","text/html; charset=utf-8")
+        return header_list
     end
 
-    def change_body()
-        body = ""
+    def change_error_body()
+        body = nil
         error_page_list = {
             400 => "リクエストされた内容をサーバーは理解できませんでした。<br>ブラウザのキャッシュやCookieを削除すると解消される可能性があります。",
             401 => "認証に失敗しました。<br>正しいユーザー情報でログインする必要があります。",
