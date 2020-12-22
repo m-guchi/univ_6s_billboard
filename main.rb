@@ -5,12 +5,15 @@ require_relative "./src/router"
 require_relative "./src/post_article"
 require_relative "./src/http_status_code"
 require_relative "./src/method_evaluation"
+require_relative "./src/request_message"
 
 logger = Logger.new('log/request.log')
 logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
 
 port = 8080 # ポート番号
 ss = TCPServer.open(port)
+
+p "connection: http://localhost:" + port.to_s
 
 loop do
     Thread.start(ss.accept) do |s|
@@ -19,39 +22,25 @@ loop do
         request_messages = s.readpartial(max_length).split(/\R/)
         logger.debug(request_messages)
 
-        # リクエストを解釈
-        # リクエストライン
-        method, request_url, http_version = request_messages.shift.split
-        # メッセージヘッダ
-        message_header = Hash.new
-        loop do
-            msg = request_messages.shift
-            if msg == "" || msg == nil
-                break
-            end
-            key, val = msg.split(": ",2)
-            message_header.store(key,val)
-        end
-        # メッセージボディ
-        message_body = Hash.new
-        unless request_messages.join("\n") == ""
-            request_messages.join("\n").split("&").each do |m|
-                pair = m.split("=")
-                message_body.store(pair[0], CGI.unescape(pair[1] || ""))
-            end
-        end
+        req_msg = RequestMessage.new(request_messages)
+        method, request_url, http_version = req_msg.fetch_request_line
+        message_header = req_msg.fetch_message_header
+        message_body = req_msg.fetch_message_body
 
+        # 投稿
         unless message_body.empty?
             PostArticle.new(message_body["name"],message_body["article"])
         end
 
+        # メソッドの評価
         method_evaluation = MethodEvaluation.new(method)
-
         if method_evaluation.is_valid
             router = Router.new(request_url, method)
             status_code, header_hash, body = router.routing
         else
             status_code = 501
+            header_hash = {}
+            body = ""
         end
 
         # ステータスコードで表示内容を制御

@@ -20,21 +20,6 @@ class Router
             router_css()
         else
             router_html()
-            # if ["GET","HEAD","POST"].include?(@method.method)
-            #     case @paths[0]
-            #     when "index"
-            #         @status_code = 200
-            #         @header.store("Content-Type","text/html; charset=utf-8")
-            #         index_html = ERB.new(File.read(__dir__ + "/../templetes/index.html.erb"))
-            #         @csv = CSV.read(__dir__ + "/../data/text.csv")
-            #         @body = index_html.result(binding)
-            #     else
-            #         @status_code = 404
-            #     end
-            # else
-            #     @status_code = 405
-            #     @header.store("Allow","GET, HEAD, POST")
-            # end
         end
         return @status_code, @header, @body
     end
@@ -48,7 +33,7 @@ class Router
         end
         unless ["GET","HEAD","POST"].include?(@method.method)
             @status_code = 405
-            @header.store("Allow","GET, HEAD","POST")
+            @header.store("Allow","GET, HEAD, POST")
             return 0
         end
         controller_html(file_path, need_csv)
