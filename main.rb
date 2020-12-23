@@ -18,8 +18,8 @@ p "connection: http://localhost:" + port.to_s
 loop do
     Thread.start(ss.accept) do |s|
         # リクエストを受け取る
-        max_length = 4096 # データの最大長
-        request_messages = s.readpartial(max_length).split(/\R/)
+        max_request_char = 65536 # request取得可能最大長
+        request_messages = s.readpartial(max_request_char).split(/\R/)
         logger.debug(request_messages)
 
         req_msg = RequestMessage.new(request_messages)
