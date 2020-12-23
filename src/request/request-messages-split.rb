@@ -1,16 +1,24 @@
-class RequestMessage
+class RequestMessagesSplit
     def initialize(request_messages)
         @messages = request_messages
-        analyze_request_line()
-        analyze_message_header()
-        analyze_message_body()
+        analysis_request_line()
+        analysis_message_header()
+        analysis_message_body()
     end
 
-    def fetch_request_line
+    def request_line
         return @method, @request_url, @http_version
     end
+    
+    def message_header
+        return @message_header
+    end
 
-    def analyze_request_line
+    def message_body
+        return @message_body
+    end
+
+    def analysis_request_line
         loop do # 空行は無視(RFC2616 4.1)
             request_line = @messages.shift
             unless request_line == ""
@@ -19,13 +27,9 @@ class RequestMessage
             end
         end
     end
-    private:analyze_request_line
+    private:analysis_request_line
 
-    def fetch_message_header
-        return @message_header
-    end
-
-    def analyze_message_header
+    def analysis_message_header
         @message_header = Hash.new
         loop do # 空行or最後までmessage_header(RFC2616 4.1)
             msg = @messages.shift
@@ -36,13 +40,9 @@ class RequestMessage
             @message_header.store(key.downcase, val.lstrip)
         end
     end
-    private:analyze_message_header
+    private:analysis_message_header
 
-    def fetch_message_body
-        return @message_body
-    end
-
-    def analyze_message_body
+    def analysis_message_body
         @message_body = Hash.new
         msg = @messages.join("\n")
         unless msg == ""
@@ -52,6 +52,5 @@ class RequestMessage
             end
         end
     end
-    private:analyze_message_body
-    
+    private:analysis_message_body
 end

@@ -1,11 +1,13 @@
 require "socket"
 require 'logger'
-require "csv"
-require_relative "./src/router"
+# require "csv"
+require_relative "./src/request/request-messages-split"
+require_relative "./src/request/request-method"
+require_relative "./src/request/request-url"
+require_relative "./src/request/routing"
+# require_relative "./src/router"
 require_relative "./src/post_article"
 require_relative "./src/http_status_code"
-require_relative "./src/method_evaluation"
-require_relative "./src/request_message"
 
 logger = Logger.new('log/request.log')
 logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
@@ -22,10 +24,10 @@ loop do
         request_messages = s.readpartial(max_request_char).split(/\R/)
         logger.debug(request_messages)
 
-        req_msg = RequestMessage.new(request_messages)
-        method, request_url, http_version = req_msg.fetch_request_line
-        message_header = req_msg.fetch_message_header
-        message_body = req_msg.fetch_message_body
+        _request_message = RequestMessagesSplit.new(request_messages)
+        method, request_url, http_version = _request_message.request_line
+        # message_header = _request_message.message_header
+        message_body = _request_message.message_body
 
         # 投稿
         unless message_body.empty?
@@ -33,10 +35,15 @@ loop do
         end
 
         # メソッドの評価
-        method_evaluation = MethodEvaluation.new(method)
-        if method_evaluation.is_valid
-            router = Router.new(request_url, method)
-            status_code, header_hash, body = router.routing
+        _method = RequestMethod.new(method)
+        if _method.valid?
+            _request_url = RequestURL.new(request_url)
+            # _router = Router.new(_method.method, _request_url.path, _request_url.param)
+            _routing = Routing.new(_method.method, _request_url.path)
+            # status_code, header_hash, body = _router.routing
+            status_code = _routing.status_code
+            header_hash = _routing.header_hash
+            body = _routing.body
         else
             status_code = 501
             header_hash = {}
@@ -51,7 +58,7 @@ loop do
         end
 
         # メソッドがHEADの場合はbody削除
-        if method_evaluation.method == "HEAD"
+        if _method.method == "HEAD"
             body = ""
         end
 

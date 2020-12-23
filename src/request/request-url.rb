@@ -1,17 +1,16 @@
-class UrlAnalysis
-
+class RequestURL
     def initialize(url)
         path, param = split_url(url)
-        @paths = split_path(path)
-        @params = param ? split_param(param) : nil
+        @path = split_path(path)
+        @param = param ? split_param(param) : nil
     end
 
-    def paths()
-        return @paths
+    def path
+        return @path
     end
 
-    def params()
-        return @params
+    def param
+        return @param
     end
 
     def split_url(url)
@@ -28,10 +27,10 @@ class UrlAnalysis
             path += "index"
         end
         if path.slice(0) == "/"
-            path[0]=""
+            path[0] = ""
         end
         paths = path.split("/")
-        return paths ? paths : nil
+        return paths || nil
     end
     private:split_path
 
@@ -41,6 +40,7 @@ class UrlAnalysis
             pair = p.split("=")
             params.store(pair[0], CGI.unescape(pair[1] || ""))
         end
+        return params
     end
-    private:split_param
+    private:split_path
 end

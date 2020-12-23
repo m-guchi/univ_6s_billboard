@@ -1,16 +1,12 @@
 require "erb"
 require "csv"
 require "cgi/util"
-require_relative "./url_analysys"
-require_relative "./method_evaluation"
 
 class Router
-    def initialize(url, method)
-        @url = url
-        url_analysys = UrlAnalysis.new(url)
-        @paths = url_analysys.paths
-        @params = url_analysys.params
-        @method = MethodEvaluation.new(method)
+    def initialize(method, path, param)
+        @paths = path
+        @params = param
+        @method = method
     end
 
     def routing
@@ -31,7 +27,7 @@ class Router
             @status_code = 404
             return 0
         end
-        unless ["GET","HEAD","POST"].include?(@method.method)
+        unless ["GET","HEAD","POST"].include?(@method)
             @status_code = 405
             @header.store("Allow","GET, HEAD, POST")
             return 0
@@ -56,7 +52,7 @@ class Router
             @status_code = 404
             return 0
         end
-        unless ["GET","HEAD"].include?(@method.method)
+        unless ["GET","HEAD"].include?(@method)
             @status_code = 405
             @header.store("Allow","GET, HEAD")
             return 0
