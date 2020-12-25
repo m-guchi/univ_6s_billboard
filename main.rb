@@ -40,7 +40,6 @@ loop do
             _request_url = RequestURL.new(request_url)
             # _router = Router.new(_method.method, _request_url.path, _request_url.param)
             _routing = Routing.new(_method.method, _request_url.path)
-            # status_code, header_hash, body = _router.routing
             status_code = _routing.status_code
             header_hash = _routing.header_hash
             body = _routing.body
