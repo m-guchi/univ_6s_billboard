@@ -30,7 +30,7 @@ loop do
         # message_header = _request_message.message_header
         message_body = _request_message.message_body
 
-        # メソッドの評価
+        # ヘッダーの評価
         _method = RequestMethod.new(method)
         _request_url = RequestURL.new(request_url)
         
