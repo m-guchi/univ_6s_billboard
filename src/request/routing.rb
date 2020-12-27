@@ -43,7 +43,7 @@ class Routing
             @@header_hash = _controller.header_hash
             @@body = _controller.body
         else
-            @@format_status_code = 404
+            @@status_code = 404
         end
     end
     private:routing_rb

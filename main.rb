@@ -29,17 +29,11 @@ loop do
         # message_header = _request_message.message_header
         message_body = _request_message.message_body
 
-        # 投稿
-        # unless message_body.empty?
-        #     PostArticle.new(message_body["name"],message_body["article"])
-        # end
-
         # メソッドの評価
         _method = RequestMethod.new(method)
         _request_url = RequestURL.new(request_url)
         
         if _method.valid?
-            # _router = Router.new(_method.method, _request_url.path, _request_url.param)
             _routing = Routing.new(_method.method, _request_url.path, message_body)
             status_code = _routing.status_code
             header_hash = _routing.header_hash
