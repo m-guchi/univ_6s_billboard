@@ -10,12 +10,13 @@ class Routing
         ".json" => "application/json",
     }
 
-    def initialize(method, path)
+    def initialize(method, path, message_body)
         @method = method
         @path = path
+        @message_body = message_body
         extension = File.extname(@path.last)
         if extension == "" || !@@mime_type_list.include?(extension)
-            routing_rb()
+            routing_rb(message_body)
         else
             routing_public(extension)
         end
@@ -33,11 +34,11 @@ class Routing
         return @@body
     end
 
-    def routing_rb
+    def routing_rb(message_body)
         controller_file_path = "./src/controller/" + @path.join("/") + ".rb"
         if File.exist?(controller_file_path)
             require controller_file_path
-            _controller = Object.const_get(@path.last.capitalize).new(@method)
+            _controller = Object.const_get(@path.last.capitalize).new(@method, message_body)
             @@status_code = _controller.status_code
             @@header_hash = _controller.header_hash
             @@body = _controller.body

@@ -10,8 +10,9 @@ class ControllerBase
         ".json" => "application/json",
     }
 
-    def initialize(method)
+    def initialize(method, message_body)
         @@method = method
+        @@message_body = message_body
     end
 
     def status_code
