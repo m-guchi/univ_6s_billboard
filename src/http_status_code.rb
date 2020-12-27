@@ -46,7 +46,7 @@ class HttpStatusCode
 
     def update_error_header_list()
         header_list = {}
-        header_list.store("Content-Type","text/html; charset=utf-8")
+        header_list.store("Content-Type","text/html; charset=UTF-8")
         return header_list
     end
 

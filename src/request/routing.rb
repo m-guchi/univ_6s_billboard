@@ -60,7 +60,7 @@ class Routing
             return 0
         end
         @@status_code = 200
-        @@header_hash.store("Content-Type", @@mime_type_list[extension] + "; charset=utf-8")
+        @@header_hash.store("Content-Type", @@mime_type_list[extension] + "; charset=UTF-8")
         @@body = ERB.new(File.read(file_path)).result(binding)
     end
 end

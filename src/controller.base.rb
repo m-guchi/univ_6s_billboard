@@ -32,6 +32,6 @@ class ControllerBase
 
     def set_mime_type(extension)
         mime_type = @@mime_type_list[extension]
-        @@header_hash.store("Content-Type" , mime_type + "; charset=utf-8")
+        @@header_hash.store("Content-Type" , mime_type + "; charset=UTF-8")
     end
 end
