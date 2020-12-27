@@ -1,4 +1,3 @@
-require "./src/post_article"
 require "./src/controller.base"
 require "./data/model/article"
 
