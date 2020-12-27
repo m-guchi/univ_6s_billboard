@@ -1,8 +1,6 @@
 class ControllerBase
-    @@header_hash = Hash.new
-    @@body = ""
+    
 
-    @@valid_method_list = ["GET","HEAD"]
     @@mime_type_list = {
         ".html" => "text/html",
         ".css" => "text/css",
@@ -11,6 +9,9 @@ class ControllerBase
     }
 
     def initialize(method, message_body)
+        @@header_hash = Hash.new
+        @@body = ""
+        @@valid_method_list = ["GET","HEAD"]
         @@method = method
         @@message_body = message_body
     end
