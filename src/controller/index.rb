@@ -1,5 +1,6 @@
 require "./src/post_article"
 require "./src/controller.base"
+require "./data/model/article"
 
 class Index < ControllerBase
     def initialize(method, message_body)
@@ -7,7 +8,8 @@ class Index < ControllerBase
         @@valid_method_list.append("POST")
         if valid_method?
             if method == "POST"
-                post()
+                _article = ModelArticle.new()
+                _article.post(message_body["name"], message_body["article"])
             end
         end
     end
