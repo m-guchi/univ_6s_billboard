@@ -9,8 +9,10 @@ require_relative "./src/request/routing"
 require_relative "./src/post_article"
 require_relative "./src/http_status_code"
 
-logger = Logger.new('log/request.log')
-logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
+request_logger = Logger.new('log/request.log')
+request_logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
+response_logger = Logger.new('log/response.log')
+response_logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
 
 port = 8080 # ポート番号
 ss = TCPServer.open(port)
@@ -22,7 +24,7 @@ loop do
         # リクエストを受け取る
         max_request_char = 65536 # request取得可能最大長
         request_messages = s.readpartial(max_request_char).split(/\R/)
-        logger.debug(request_messages)
+        request_logger.debug(request_messages)
 
         _request_message = RequestMessagesSplit.new(request_messages)
         method, request_url, http_version = _request_message.request_line
@@ -56,18 +58,23 @@ loop do
             body = ""
         end
 
+        response_headers = Array.new
+        response_headers.push("HTTP/1.0 "+http_status_code.format_status_code)
+
         # ヘッダーを展開
-        header = header_hash.map{|key,value| [key + ": " + value]}.join("\n")
+        header_hash.each do |key,value|
+            response_headers.push(key + ": " + value)
+        end
 
+        response_header = response_headers.join("\n")
 
-        response_messages = <<~EOHTTP
-            HTTP/1.0 #{http_status_code.format_status_code}
-            #{header}
+        response_messages = <<~EORQMSG
+            #{response_header}
 
             #{body}
-        EOHTTP
+        EORQMSG
 
-
+        response_logger.debug(response_headers)
         s.puts(response_messages)
         s.close
     end
