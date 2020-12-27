@@ -12,7 +12,7 @@ class PostArticle
     end
     
     def fetch_last_no()
-        csv = CSV.read(__dir__ + "/../data/text.csv")
+        csv = CSV.read(__dir__ + "./model/data/article.csv")
         if !csv || csv.empty?
             return 0
         end
@@ -20,7 +20,7 @@ class PostArticle
     end
 
     def insert_data(data)
-        CSV.open(__dir__ + "/../data/text.csv","a") do |csv|
+        CSV.open("./model/data/article.csv","a") do |csv|
             csv << data
         end
     end

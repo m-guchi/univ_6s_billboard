@@ -21,7 +21,7 @@ class Index < ControllerBase
     def body
         file_path = "./templetes/index.html.erb"
         file_contents = ERB.new(File.read(file_path))
-        @csv = CSV.read("./data/text.csv")
+        @csv = CSV.read("./model/data/article.csv")
         return file_contents.result(binding)
     end
 
