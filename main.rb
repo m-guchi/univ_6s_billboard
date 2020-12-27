@@ -6,7 +6,6 @@ require_relative "./src/request/request-method"
 require_relative "./src/request/request-url"
 require_relative "./src/request/routing"
 # require_relative "./src/router"
-require_relative "./src/post_article"
 require_relative "./src/http_status_code"
 
 request_logger = Logger.new('log/request.log')
