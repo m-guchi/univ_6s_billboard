@@ -1,5 +1,6 @@
 require "socket"
 require 'logger'
+require 'time'
 # require "csv"
 require_relative "./src/request/request-messages-split"
 require_relative "./src/request/request-method"
@@ -38,6 +39,7 @@ loop do
             _routing = Routing.new(_method.method, _request_url.path, message_body)
             status_code = _routing.status_code
             header_hash = _routing.header_hash
+            header_hash.store("Date",Time.now.httpdate)
             body = _routing.body
         else
             status_code = 501
