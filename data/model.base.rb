@@ -32,6 +32,9 @@ class ModelBase
             CSV.open(@@file_dir,"a") do |csv|
                 csv << data
             end
+            return true
+        else
+            return false
         end
     end
     

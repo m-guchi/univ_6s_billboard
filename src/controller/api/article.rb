@@ -48,10 +48,16 @@ class Article < ControllerBase
             }
             return 0
         end
-        @@model.post(@@message_body["name"], @@message_body["article"])
-        @body = {
-            "ok"=>true,
-            "data"=>@@model.fetch_last
-        }
+        if @@model.post(@@message_body["name"], @@message_body["article"])
+            @body = {
+                "ok"=>true,
+                "data"=>@@model.fetch_last
+            }
+        else
+            @body = {
+                "ok"=>false,
+                "error"=>'Error insert data'
+            }
+        end
     end
 end
