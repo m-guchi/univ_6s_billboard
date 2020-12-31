@@ -34,7 +34,7 @@ input, textarea{
     padding: 0.2rem 0.5rem;
 }
 
-input[type="submit"]{
+input[type="button"].submit-button {
     background-color: var(--button-bg-color);
     border: none;
     border-radius: 1.5rem;
@@ -95,6 +95,7 @@ main{
 }
 #submit-form:hover{
     opacity: 0.7;
+    cursor: pointer;
 }
 
 article{

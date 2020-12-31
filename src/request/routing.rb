@@ -17,6 +17,10 @@ class Routing
         extension = File.extname(@path.last)
         if extension == "" || !@@mime_type_list.include?(extension)
             routing_rb(message_body)
+            if @@status_code == 404
+                @path[-1] += ".html"
+                routing_public(".html")
+            end
         else
             routing_public(extension)
         end
