@@ -2,7 +2,9 @@ $(function(){
     $("#submit-form").on("click", function () {
         const name = $('#article-form-box').find('input[name="name"]').val()
         const article = $('#article-form-box').find('textarea[name="article"]').val()
-        postArticle(name, article)
+        if(article!=""){
+            postArticle(name, article)
+        }
     })
 })
 
