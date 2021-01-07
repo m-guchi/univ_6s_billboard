@@ -3,7 +3,7 @@ require "./src/controller.base"
 require "./data/model/article"
 
 class Article < ControllerBase
-    def initialize(method, message_body)
+    def initialize(method, param, message_body)
         super
         @@valid_method_list.append("POST")
         @@model = ModelArticle.new()
@@ -27,6 +27,20 @@ class Article < ControllerBase
     end
 
     def get
+        unless @@param
+            @body = {
+                "ok"=>true,
+                "data"=>@@model.fetch_all
+            }
+            return 0
+        end
+        if @@param.include?("name")
+            @body = {
+                "ok"=>true,
+                "data"=>@@model.fetch_filter_name(@@param["name"])
+            }
+            return 0
+        end
         @body = {
             "ok"=>true,
             "data"=>@@model.fetch_all

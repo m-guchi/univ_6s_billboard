@@ -8,11 +8,12 @@ class ControllerBase
         ".json" => "application/json",
     }
 
-    def initialize(method, message_body)
+    def initialize(method, param, message_body)
         @@header_hash = Hash.new
         @@body = ""
         @@valid_method_list = ["GET","HEAD"]
         @@method = method
+        @@param = param
         @@message_body = message_body
     end
 

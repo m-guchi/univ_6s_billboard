@@ -36,7 +36,7 @@ loop do
         _request_url = RequestURL.new(request_url)
         
         if _method.valid?
-            _routing = Routing.new(_method.method, _request_url.path, message_body)
+            _routing = Routing.new(_method.method, _request_url.path, _request_url.param, message_body)
             status_code = _routing.status_code
             header_hash = _routing.header_hash
             header_hash.store("Date",Time.now.httpdate)

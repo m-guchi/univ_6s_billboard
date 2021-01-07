@@ -7,6 +7,10 @@ class ModelArticle < ModelBase
         setting(@file_dir,@key_val)
     end
 
+    def fetch_filter_name(name)
+        return fetch_all.select {|n| n[@key_val.index("name")] == name}
+    end
+
     def post(name, article)
         id = fetch_last[@key_val.index("id")].to_i + 1
         time = now_unix_time()
