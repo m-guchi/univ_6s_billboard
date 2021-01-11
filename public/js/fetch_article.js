@@ -1,5 +1,10 @@
+const sliceNum = 20
+
 $(function() {
-    fetchArticle();
+    fetchArticle()
+    $(document).on("click", ".article-page-button", function () {
+        displayDOM($(this).text())
+    })
 })
 
 function fetchArticle() {
@@ -22,9 +27,23 @@ function fetchArticle() {
 }
 
 function successFetchArticle(data) {
+    allData = data.reverse() // Global変数・fetchを繰り返さないため
+    displayDOM()
+}
+
+function displayDOM(page = 1) {
+    displayArticle(page)
+    displayPageButton(page, allData.length)
+}
+
+function errorFetchArticle(){
+    console.error("error")
+}
+
+function displayArticle(page){
     let html = ""
-    data.reverse()
-    data.forEach(function(val){
+    data = sliceData(allData,page)
+    data.forEach(function (val) {
         let dateTime = new Date(Number(val[1]))
         let time = dateTime.toLocaleDateString('ja-JP')
         time += "(" + ["日", "月", "火", "水", "木", "金", "土"][dateTime.getDay()] + ") "
@@ -33,10 +52,6 @@ function successFetchArticle(data) {
         html += displayItem(val[0], val[2], time, text)
     })
     $("#article").html(html)
-}
-
-function errorFetchArticle(){
-    console.error("error")
 }
 
 function displayItem(id,name,time,text) {
@@ -49,4 +64,22 @@ function displayItem(id,name,time,text) {
             </div>
             <div class="item-text">${text}</div>
         </div>`
+}
+
+function sliceData(data, page){
+    return data.slice(sliceNum * (page - 1), sliceNum * page)
+}
+
+function displayPageButton(page, dataCount){
+    let html = ""
+    const maxPage = Math.ceil(dataCount / sliceNum)
+    for (let i = 1; i < maxPage+1 ;i++){
+        if(page == i){
+            id = "id='article-page-active'"
+        }else{
+            id = ""
+        }
+        html += `<div class="article-page-button" ${id}>${i}</div>`
+    }
+    $("#article-page-box").html(html)
 }

@@ -124,3 +124,26 @@ article{
 .item-text{
     margin: 0.65rem 1em 0 1.5em;
 }
+
+#article-page-box{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.article-page-button{
+    background-color: var(--button-bg-color);
+    border-radius: 0.7rem;
+    font-size: 1.3rem;
+    margin: 1rem 0.8rem 3rem;
+    padding: 1rem;
+}
+
+.article-page-button:hover{
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+#article-page-active{
+    background-color: var(--secondary-color);
+}
