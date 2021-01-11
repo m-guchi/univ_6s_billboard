@@ -1,17 +1,18 @@
 class RequestMethod
-    @@method_list = [
-        "OPTIONS",
-        "GET",
-        "HEAD",
-        "POST",
-        "PUT",
-        "DELETE",
-        "TRACE",
-        "CONNECT"
-    ]
+    
 
     def initialize(method)
         @method = method
+        @method_list = [
+            "OPTIONS",
+            "GET",
+            "HEAD",
+            "POST",
+            "PUT",
+            "DELETE",
+            "TRACE",
+            "CONNECT"
+        ]
     end
 
     def method
@@ -19,7 +20,7 @@ class RequestMethod
     end
 
     def valid?
-        return @@method_list.include?(@method)
+        return @method_list.include?(@method)
     end
 
 end

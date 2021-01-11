@@ -1,6 +1,7 @@
 class RequestMessagesSplit
     def initialize(request_messages)
         @messages = request_messages
+        @error = false
         analysis_request_line()
         analysis_message_header()
         analysis_message_body()
@@ -18,10 +19,21 @@ class RequestMessagesSplit
         return @message_body
     end
 
+    def row_message_body
+        return @row_message_body
+    end
+
+    def valid?
+        return !(@error)
+    end
+
     def analysis_request_line
         loop do # 空行は無視(RFC2616 4.1)
             request_line = @messages.shift
             unless request_line == ""
+                unless request_line.split.length == 3
+                    @error = true
+                end
                 @method, @request_url, @http_version = request_line.split
                 break
             end
@@ -45,6 +57,7 @@ class RequestMessagesSplit
     def analysis_message_body
         @message_body = Hash.new
         msg = @messages.join("\n")
+        @row_message_body = msg
         unless msg == ""
             msg.split("&").each do |m|
                 key, val = m.split("=")

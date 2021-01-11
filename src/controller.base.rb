@@ -43,11 +43,11 @@ class ControllerBase
         end
     end
 
-    def set_location(url)
+    def location=(url)
         @@header_hash.store("Location", url)
     end
 
-    def set_mime_type(extension)
+    def mime_type=(extension)
         mime_type = @@mime_type_list[extension]
         @@header_hash.store("Content-Type" , mime_type + "; charset=UTF-8")
     end

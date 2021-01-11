@@ -1,7 +1,5 @@
 class Routing
 
-    
-
     def initialize(method, path, param, message_body)
         @method = method
         @path = path
@@ -17,16 +15,7 @@ class Routing
             ".js" => "text/javascript",
             ".json" => "application/json",
         }
-        if @extension == "" || !@mime_type_list.include?(@extension)
-            routing_rb()
-            if @status_code == 404
-                @path[-1] += ".html"
-                @extension = ".html"
-                routing_public()
-            end
-        else
-            routing_public()
-        end
+        routing()
     end
 
     def status_code
@@ -40,6 +29,20 @@ class Routing
     def body
         return @body
     end
+
+    def routing()
+        if @extension == "" || !@mime_type_list.include?(@extension)
+            routing_rb()
+            if @status_code == 404
+                @path[-1] += ".html"
+                @extension = ".html"
+                routing_public()
+            end
+        else
+            routing_public()
+        end
+    end
+    private:routing
 
     def routing_rb()
         controller_file_path = "./src/controller/" + @path.join("/") + ".rb"

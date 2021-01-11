@@ -17,7 +17,7 @@ class ApiArticle < ControllerBase
     end
 
     def header_hash
-        set_mime_type(".json")
+        self.mime_type = ".json"
         set_method_allow()
         return @@header_hash
     end
