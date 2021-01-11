@@ -1,18 +1,17 @@
 require "socket"
 require 'logger'
 require 'time'
-# require "csv"
 require_relative "./src/request/request-messages-split"
 require_relative "./src/request/request-method"
 require_relative "./src/request/request-url"
 require_relative "./src/request/routing"
-# require_relative "./src/router"
-require_relative "./src/http_status_code"
+require_relative "./src/response/http-status-code"
 
+# ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
 request_logger = Logger.new('log/request.log')
-request_logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
+request_logger.level = Logger::DEBUG
 response_logger = Logger.new('log/response.log')
-response_logger.level = Logger::DEBUG # ログレベル[UNKNOWN,FATAL,ERROR,WARN,INFO,DEBUG]
+response_logger.level = Logger::DEBUG
 
 port = 8080 # ポート番号
 ss = TCPServer.open(port)
@@ -69,11 +68,11 @@ loop do
 
         response_header = response_headers.join("\n")
 
-        response_messages = <<~EORQMSG
+        response_messages = <<~EORMSG
             #{response_header}
 
             #{body}
-        EORQMSG
+        EORMSG
 
         response_logger.debug(response_headers)
         s.puts(response_messages)
