@@ -9,6 +9,7 @@ class HttpStatusCode
             204 => "No Content",
             301 => "Moved Permanently",
             302 => "Found",
+            303 => "See Other",
             400 => "Bad Request",
             401 => "Unauthorized",
             403 => "Forbidden",
@@ -41,10 +42,10 @@ class HttpStatusCode
     end
 
     def format_status_code()
-        return status_code + " " + status_text
+        return status_code() + " " + status_text()
     end
 
-    def update_error_header_list()
+    def update_not_success_header_list()
         header_list = {}
         header_list.store("Content-Type","text/html; charset=UTF-8")
         return header_list
@@ -62,8 +63,8 @@ class HttpStatusCode
             501 => "リクエストされたメソッドをサーバーは認識することができません。",
         }
         if error_page_list.has_key?(@status_code)
-            error_html = ERB.new(File.read(__dir__ + "/../templetes/error.html.erb"))
-            @status_text = status_text
+            error_html = ERB.new(File.read(__dir__ + "/../../templetes/error.html.erb"))
+            @status_text = status_text()
             @error_text = error_page_list[@status_code]
             body = error_html.result(binding)
         end

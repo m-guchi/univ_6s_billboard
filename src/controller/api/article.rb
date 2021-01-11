@@ -2,7 +2,7 @@ require 'json'
 require "./src/controller.base"
 require "./data/model/article"
 
-class Article < ControllerBase
+class ApiArticle < ControllerBase
     def initialize(method, param, message_body)
         super
         @@valid_method_list.append("POST")

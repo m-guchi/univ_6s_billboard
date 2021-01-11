@@ -15,10 +15,22 @@ class ControllerBase
         @@method = method
         @@param = param
         @@message_body = message_body
+        @@status_code = 200
     end
 
     def status_code
-        return valid_method?() ? 200 : 405
+        unless valid_method?()
+            @@status_code = 405
+        end
+        return @@status_code
+    end
+
+    def header_hash
+        return @@header_hash
+    end
+
+    def body
+        return nil
     end
 
     def valid_method?
@@ -29,6 +41,10 @@ class ControllerBase
         unless valid_method?()
             @@header_hash.store("Allow", @@valid_method_list.join(", "))
         end
+    end
+
+    def set_location(url)
+        @@header_hash.store("Location", url)
     end
 
     def set_mime_type(extension)

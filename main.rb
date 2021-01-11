@@ -27,13 +27,14 @@ loop do
 
         _request_message = RequestMessagesSplit.new(request_messages)
         method, request_url, http_version = _request_message.request_line
-        # message_header = _request_message.message_header
+        message_header = _request_message.message_header
         message_body = _request_message.message_body
 
         # ヘッダーの評価
         _method = RequestMethod.new(method)
         _request_url = RequestURL.new(request_url)
         
+        # データの取得
         if _method.valid?
             _routing = Routing.new(_method.method, _request_url.path, _request_url.param, message_body)
             status_code = _routing.status_code
@@ -42,15 +43,15 @@ loop do
             body = _routing.body
         else
             status_code = 501
-            header_hash = {}
+            header_hash = Hash.new()
             body = ""
         end
 
         # ステータスコードで表示内容を制御
-        http_status_code = HttpStatusCode.new(status_code)
-        unless http_status_code.is_success()
-            header_hash.merge!(http_status_code.update_error_header_list())
-            body = http_status_code.change_error_body() || body
+        _http_status_code = HttpStatusCode.new(status_code)
+        unless _http_status_code.is_success() # 200番台以外の場合
+            header_hash.merge!(_http_status_code.update_not_success_header_list())
+            body = _http_status_code.change_error_body() || body
         end
 
         # メソッドがHEADの場合はbody削除
@@ -59,7 +60,7 @@ loop do
         end
 
         response_headers = Array.new
-        response_headers.push("HTTP/1.0 "+http_status_code.format_status_code)
+        response_headers.push("HTTP/1.0 "+_http_status_code.format_status_code)
 
         # ヘッダーを展開
         header_hash.each do |key,value|
