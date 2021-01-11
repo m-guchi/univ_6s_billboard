@@ -4,6 +4,9 @@ $(function(){
         const article = $('#article-form-box').find('textarea[name="article"]').val()
         if(article!=""){
             postArticle(name, article)
+            $("#post-alert-box").html("")
+        }else{
+            $("#post-alert-box").html("投稿内容を入力してください")
         }
     })
 })
