@@ -123,6 +123,18 @@ article{
     margin: 2.6rem 0;
 }
 
+.thread-item{
+    border-bottom: 1px solid var(--head-bg-color);
+    color: var(--text-color);
+    display: block;
+    padding-bottom: 6px;
+    text-decoration: none;
+}
+
+.thread-item:hover{
+    color: var(--alert-color);
+}
+
 .item-header{
     color: var(--head-bg-color);
     font-size: 1.4rem;
@@ -137,6 +149,11 @@ article{
 }
 
 .item-text{
+    margin: 0.65rem 1em 0 1.5em;
+}
+
+.thread-title{
+    font-weight: bold;
     margin: 0.65rem 1em 0 1.5em;
 }
 
