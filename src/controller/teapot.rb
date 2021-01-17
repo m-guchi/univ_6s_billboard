@@ -1,10 +1,10 @@
 require "./src/controller.base"
 require "./data/model/article"
 
-class Article < ControllerBase
+class Teapot < ControllerBase
     def initialize(method, param, message_body)
         super
-        self.location = "/"
-        @status_code = 301
+        @status_code = 418
+        # @body = 
     end
 end
