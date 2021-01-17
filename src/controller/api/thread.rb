@@ -64,6 +64,7 @@ class ApiThread < ControllerBase
             return 0
         end
         if @model.post(@message_body["name"])
+            @model.reload()
             @body = {
                 "ok"=>true,
                 "data"=>@model.fetch_last

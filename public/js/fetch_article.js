@@ -30,7 +30,6 @@ function fetchThread(thread_id) {
 }
 
 function displayThreadTitle(data) {
-    console.log(data)
     const name = data[1]
     $("#thread_title").html(name)
 }

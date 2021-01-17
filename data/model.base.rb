@@ -10,6 +10,10 @@ class ModelBase
         @csv_data = CSV.read(file_dir)
     end
 
+    def reload
+        @csv_data = CSV.read(@file_dir)
+    end
+
     def fetch_all
         return @csv_data[1..-1]
     end

@@ -15,6 +15,6 @@ class ModelThread < ModelBase
         random = Random.new
         id = ((random.rand)*(10**8)).round
         name = name != "" ? name : ""
-        insert([id,name])
+        return insert([id,name])
     end
 end

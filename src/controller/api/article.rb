@@ -77,6 +77,7 @@ class ApiArticle < ControllerBase
             return 0
         end
         if @model.post(@message_body["thread_id"], @message_body["name"], @message_body["article"])
+            @model.reload()
             @body = {
                 "ok"=>true,
                 "data"=>@model.fetch_last
