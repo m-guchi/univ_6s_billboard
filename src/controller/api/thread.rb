@@ -1,12 +1,12 @@
 require 'json'
 require "./src/controller.base"
-require "./data/model/article"
+require "./data/model/thread"
 
-class ApiArticle < ControllerBase
+class ApiThread < ControllerBase
     def initialize(method, param, message_body)
         super
         @valid_method_list.append("POST")
-        @model = ModelArticle.new()
+        @model = ModelThread.new()
         if valid_method?
             if method == "POST"
                 post()
@@ -34,18 +34,19 @@ class ApiArticle < ControllerBase
             }
             return 0
         end
-        if @param.include?("thread")
-            @body = {
-                "ok"=>true,
-                "data"=>@model.fetch_filter_thread(@param["thread"])
-            }
-            return 0
-        end
-        if @param.include?("name")
-            @body = {
-                "ok"=>true,
-                "data"=>@model.fetch_filter_name(@param["name"])
-            }
+        if @param.include?("id")
+            thread_data = @model.fetch_filter_thread?(@param["id"])
+            if thread_data
+                @body = {
+                    "ok"=>true,
+                    "data"=>thread_data
+                }
+            else
+                @body = {
+                    "ok"=>false,
+                    "error"=>"No match thread data"
+                }
+            end
             return 0
         end
         @body = {
@@ -55,13 +56,6 @@ class ApiArticle < ControllerBase
     end
 
     def post
-        unless @message_body.include?("thread_id")
-            @body = {
-                "ok"=>false,
-                "error"=>'Invalid parameter :thread_id'
-            }
-            return 0
-        end
         unless @message_body.include?("name")
             @body = {
                 "ok"=>false,
@@ -69,14 +63,7 @@ class ApiArticle < ControllerBase
             }
             return 0
         end
-        unless @message_body.include?("article")
-            @body = {
-                "ok"=>false,
-                "error"=>'Invalid parameter :article'
-            }
-            return 0
-        end
-        if @model.post(@message_body["thread_id"], @message_body["name"], @message_body["article"])
+        if @model.post(@message_body["name"])
             @body = {
                 "ok"=>true,
                 "data"=>@model.fetch_last

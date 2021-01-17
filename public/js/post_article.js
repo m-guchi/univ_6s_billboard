@@ -24,7 +24,7 @@ function postArticle(thread_id,name,article){
     })
     .done(function (data) {
         if(data.ok){
-            successPostArticle(data.data)
+            successPostArticle(data.data, thread_id)
         }else{
             errorPostArticle()
         }
@@ -34,10 +34,10 @@ function postArticle(thread_id,name,article){
     });
 }
 
-function successPostArticle(data){
+function successPostArticle(data, thread_id){
     $('#article-form-box').find('input[name="name"]').val("")
     $('#article-form-box').find('textarea[name="article"]').val("")
-    fetchArticle()
+    fetchArticle(thread_id)
 }
 
 function errorPostArticle() {

@@ -1,15 +1,41 @@
 const sliceNum = 20
 
 $(function() {
-    fetchArticle()
+    const pattern = /\/th\/(\d*)/
+    const thread_id = location.pathname.match(pattern)[1]
+    fetchThread(thread_id)
+    fetchArticle(thread_id)
     $(document).on("click", ".article-page-button", function () {
-        displayDOM($(this).text())
+        displayArticleDOM($(this).text())
     })
 })
 
-function fetchArticle() {
-    const pattern = /\/th\/(\d*)/
-    const thread_id = location.pathname.match(pattern)[1]
+function fetchThread(thread_id) {
+    $.ajax({
+        url: '/api/thread?id=' + thread_id,
+        type: 'GET',
+        dataType: 'json',
+        timeout: 5000,
+    })
+    .done(function (data) {
+        if(data.ok){
+            displayThreadTitle(data.data)
+        }else{
+            window.location.href = '/';
+        }
+    })
+    .fail(function () {
+        errorFetch()
+    });
+}
+
+function displayThreadTitle(data) {
+    console.log(data)
+    const name = data[1]
+    $("#thread_title").html(name)
+}
+
+function fetchArticle(thread_id) {
     $.ajax({
         url: '/api/article?thread=' + thread_id,
         type: 'GET',
@@ -20,25 +46,25 @@ function fetchArticle() {
         if(data.ok){
             successFetchArticle(data.data)
         }else{
-            errorFetchArticle()
+            errorFetch()
         }
     })
     .fail(function () {
-        errorFetchArticle()
+        errorFetch()
     });
 }
 
 function successFetchArticle(data) {
     allData = data.reverse() // Global変数・fetchを繰り返さないため
-    displayDOM()
+    displayArticleDOM()
 }
 
-function displayDOM(page = 1) {
+function displayArticleDOM(page = 1) {
     displayArticle(page)
     displayPageButton(page, allData.length)
 }
 
-function errorFetchArticle(){
+function errorFetch(){
     console.error("error")
 }
 
