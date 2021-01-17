@@ -1,5 +1,6 @@
-class Routing
+require "./src/request/htaccess"
 
+class Routing
     def initialize(method, path, param, message_body)
         @method = method
         @path = path
@@ -31,6 +32,17 @@ class Routing
     end
 
     def routing()
+        _htaccess = Htaccess.new(@path)
+        if _htaccess.has_key?("R")
+            _htaccess.rewrite
+            if _htaccess.redirect?
+                @status_code = _htaccess.status_code
+                @header_hash.merge!(_htaccess.header_hash)
+                return 0
+            else
+                @path = _htaccess.paths
+            end
+        end
         if @extension == "" || !@mime_type_list.include?(@extension)
             routing_rb()
             if @status_code == 404

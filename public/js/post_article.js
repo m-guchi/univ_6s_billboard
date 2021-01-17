@@ -13,7 +13,7 @@ $(function(){
 
 function postArticle(name,article){
     $.ajax({
-        url: 'api/article',
+        url: '/api/article',
         type: 'POST',
         data: { name: name, article: article },
         dataType: 'json',

@@ -9,7 +9,7 @@ $(function() {
 
 function fetchArticle() {
     $.ajax({
-        url: 'api/article',
+        url: '/api/article',
         type: 'GET',
         dataType: 'json',
         timeout: 5000,
