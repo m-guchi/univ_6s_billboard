@@ -34,6 +34,13 @@ class ApiArticle < ControllerBase
             }
             return 0
         end
+        if @@param.include?("thread")
+            @body = {
+                "ok"=>true,
+                "data"=>@@model.fetch_filter_thread(@@param["thread"])
+            }
+            return 0
+        end
         if @@param.include?("name")
             @body = {
                 "ok"=>true,
@@ -48,6 +55,13 @@ class ApiArticle < ControllerBase
     end
 
     def post
+        unless @@message_body.include?("thread_id")
+            @body = {
+                "ok"=>false,
+                "error"=>'Invalid parameter :thread_id'
+            }
+            return 0
+        end
         unless @@message_body.include?("name")
             @body = {
                 "ok"=>false,
@@ -62,7 +76,7 @@ class ApiArticle < ControllerBase
             }
             return 0
         end
-        if @@model.post(@@message_body["name"], @@message_body["article"])
+        if @@model.post(@@message_body["thread_id"], @@message_body["name"], @@message_body["article"])
             @body = {
                 "ok"=>true,
                 "data"=>@@model.fetch_last

@@ -8,8 +8,10 @@ $(function() {
 })
 
 function fetchArticle() {
+    const pattern = /\/th\/(\d*)/
+    const thread_id = location.pathname.match(pattern)[1]
     $.ajax({
-        url: '/api/article',
+        url: '/api/article?thread=' + thread_id,
         type: 'GET',
         dataType: 'json',
         timeout: 5000,
@@ -44,12 +46,12 @@ function displayArticle(page){
     let html = ""
     data = sliceData(allData,page)
     data.forEach(function (val) {
-        let dateTime = new Date(Number(val[1]))
+        let dateTime = new Date(Number(val[2]))
         let time = dateTime.toLocaleDateString('ja-JP')
         time += "(" + ["日", "月", "火", "水", "木", "金", "土"][dateTime.getDay()] + ") "
         time += dateTime.toLocaleTimeString('ja-JP')
-        const text = val[3].replace(/\n/g, "</br>")
-        html += displayItem(val[0], val[2], time, text)
+        const text = val[4].replace(/\n/g, "</br>")
+        html += displayItem(val[0], val[3], time, text)
     })
     $("#article").html(html)
 }
