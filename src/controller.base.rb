@@ -14,8 +14,13 @@ class ControllerBase
         @mime_type_list = {
             ".html" => "text/html",
             ".css" => "text/css",
+            ".ico" => "image/vnd.microsoft.icon",
             ".js" => "text/javascript",
+            ".jpeg" => "image/jpeg",
+            ".jpg" => "image/jpeg",
             ".json" => "application/json",
+            ".png" => "image/png",
+            ".svg" => "image/svg+xml",
         }
     end
 

@@ -13,8 +13,13 @@ class Routing
         @mime_type_list = {
             ".html" => "text/html",
             ".css" => "text/css",
+            ".ico" => "image/vnd.microsoft.icon",
             ".js" => "text/javascript",
+            ".jpeg" => "image/jpeg",
+            ".jpg" => "image/jpeg",
             ".json" => "application/json",
+            ".png" => "image/png",
+            ".svg" => "image/svg+xml",
         }
         routing()
     end
@@ -83,6 +88,11 @@ class Routing
         end
         @status_code = 200
         @header_hash.store("Content-Type", @mime_type_list[@extension] + "; charset=UTF-8")
-        @body = ERB.new(File.read(file_path)).result(binding)
+        if @mime_type_list[@extension].split("/").first == "image"
+            # 画像ファイル(バイナリデータ)
+            @body = File.binread(file_path)
+        else
+            @body = ERB.new(File.read(file_path)).result(binding)
+        end
     end
 end
