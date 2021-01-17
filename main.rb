@@ -38,45 +38,48 @@ loop do
                 _response_data.status_code = 400
                 raise
             end
-            method, request_url, http_version = _request_message.request_line
-            _method = RequestMethod.new(method)
-            _request_url = RequestURL.new(request_url)
-            _http_version = RequestHttpVersion.new(http_version, can_accept_http_version)
-            _request_header = RequestHeader.new(_request_message.message_header)
+        rescue => e
+            p e.message
+        else
+            begin
+                method, request_url, http_version = _request_message.request_line
+                _method = RequestMethod.new(method)
+                _request_url = RequestURL.new(request_url)
+                _http_version = RequestHttpVersion.new(http_version, can_accept_http_version)
+                _request_header = RequestHeader.new(_request_message.message_header)
 
-            # データの取得
-            unless _method.valid?
-                _response_data.status_code = 501
-                raise
-            end
-
-            unless _http_version.support?
-                _response_data.status_code = 505
-                raise
-            end
-
-            # content-lengthの評価(RFC2616 4.4)
-            unless _request_message.row_message_body==""
-                if _request_header.has_content_length_key?
-                    unless _request_header.content_length_valid?(_request_message.row_message_body)
-                        _response_data.status_code = 400
-                        raise
-                    end
-                else
-                    _response_data.status_code = 411
+                # データの取得
+                unless _method.valid?
+                    _response_data.status_code = 501
                     raise
                 end
+
+                unless _http_version.support?
+                    _response_data.status_code = 505
+                    raise
+                end
+
+                # content-lengthの評価(RFC2616 4.4)
+                unless _request_message.row_message_body==""
+                    if _request_header.has_content_length_key?
+                        unless _request_header.content_length_valid?(_request_message.row_message_body)
+                            _response_data.status_code = 400
+                            raise
+                        end
+                    else
+                        _response_data.status_code = 411
+                        raise
+                    end
+                end
+            rescue => e
+                p e.message
+            else
+                _routing = Routing.new(_method.method, _request_url.path, _request_url.param, _request_message.message_body)
+                _response_data.status_code = _routing.status_code
+                _response_data.header_hash = _routing.header_hash
+                _response_data.add_header("Date", Time.now.httpdate)
+                _response_data.body = _routing.body
             end
-
-
-            _routing = Routing.new(_method.method, _request_url.path, _request_url.param, _request_message.message_body)
-            _response_data.status_code = _routing.status_code
-            _response_data.header_hash = _routing.header_hash
-            _response_data.add_header("Date", Time.now.httpdate)
-            _response_data.body = _routing.body
-
-        rescue => exception
-            p exception
         end
         
         # エラーページを表示
@@ -87,7 +90,7 @@ loop do
         end
 
         # メソッドがHEADの場合はbody削除
-        unless _response_data.status_code == 400 # _methodの未定義を防止
+        if defined? _method
             if _method.method == "HEAD"
                 _response_data.body = ""
             end
