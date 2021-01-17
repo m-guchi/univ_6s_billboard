@@ -1,7 +1,12 @@
 $(function(){
     $("#submit-form").on("click", function () {
         const name = $('#article-form-box').find('input[name="name"]').val()
-        postThread(name)
+        if(name!=""){
+            postThread(name)
+            $("#post-alert-box").html("")
+        }else{
+            $("#post-alert-box").html("スレッドタイトルを入力してください")
+        }
     })
 })
 
