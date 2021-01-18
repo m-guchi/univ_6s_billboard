@@ -35,11 +35,15 @@ class ApiThread < ControllerBase
             return 0
         end
         if @param.include?("id")
-            thread_data = @model.fetch_filter_thread?(@param["id"])
+            thread_data = @model.fetch_filter_thread(@param["id"])
             if thread_data
                 @body = {
                     "ok"=>true,
-                    "data"=>thread_data
+                    "data"=>{
+                        "prev" => @model.fetch_filter_thread_prev || false,
+                        "now" => thread_data,
+                        "next" => @model.fetch_filter_thread_next || false,
+                    }
                 }
             else
                 @body = {

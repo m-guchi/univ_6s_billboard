@@ -71,6 +71,37 @@ main{
     top: 56px;
 }
 
+#thread-paging{
+    display: flex;
+    justify-content: space-between;
+    margin: 5px auto;
+    width: calc(80% - 20px);
+    max-width: 600px;
+}
+
+#thread-paging span{
+    width: 100%;
+}
+
+#thread-prev{
+    text-align: left;
+}
+#thread-list{
+    text-align: center;
+}
+#thread-next{
+    text-align: right;
+}
+
+#thread-paging a{
+    color: var(--button-text-color);
+    text-decoration: none;
+}
+
+#thread-paging a:hover{
+    color: var(--alert-color);
+}
+
 #thread_title{
     border-bottom: 1px solid var(--text-color);
     font-size: 1.5rem;

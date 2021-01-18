@@ -7,8 +7,29 @@ class ModelThread < ModelBase
         setting(@file_dir,@key_val)
     end
 
-    def fetch_filter_thread?(thread_id)
-        return fetch_all.find {|val| val[0]==thread_id}
+    def fetch_filter_thread(thread_id)
+        @thread_id_num = fetch_all.index {|val| val[@key_val.index("id")]==thread_id}
+        if @thread_id_num
+            return fetch_all[@thread_id_num]
+        else
+            return false
+        end
+    end
+
+    def fetch_filter_thread_prev
+        if @thread_id_num && @thread_id_num > 0
+            return fetch_all[@thread_id_num-1]
+        else
+            return false
+        end
+    end
+
+    def fetch_filter_thread_next
+        if @thread_id_num && @thread_id_num < count-1
+            return fetch_all[@thread_id_num+1]
+        else
+            return false
+        end
     end
 
     def post(name)

@@ -19,7 +19,8 @@ function fetchThread(thread_id) {
     })
     .done(function (data) {
         if(data.ok){
-            displayThreadTitle(data.data)
+            displayThreadTitle(data.data.now)
+            displayThreadPaging(data.data.prev, data.data.next)
         }else{
             window.location.href = '/';
         }
@@ -34,6 +35,13 @@ function displayThreadTitle(data) {
     $("#thread_title").html(name)
 }
 
+function displayThreadPaging(prev,next) {
+    const prev_dom = prev ? `<a href="/th/${prev[0]}"><< ${prev[1]}</a>` : "　"
+    const next_dom = next ? `<a href="/th/${next[0]}">${next[1]} >></a>` : "　"
+    $("#thread-prev").html(prev_dom)
+    $("#thread-next").html(next_dom)
+}
+
 function fetchArticle(thread_id) {
     $.ajax({
         url: '/api/article?thread=' + thread_id,
@@ -42,6 +50,7 @@ function fetchArticle(thread_id) {
         timeout: 5000,
     })
     .done(function (data) {
+        console.log(data)
         if(data.ok){
             successFetchArticle(data.data)
         }else{
