@@ -79,6 +79,7 @@ main{
     padding: 0 10px 4px;
     text-align: center;
     width: calc(80% - 20px);
+    max-width: 600px;
 }
 
 #post-article-box{

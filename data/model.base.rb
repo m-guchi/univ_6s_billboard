@@ -22,6 +22,10 @@ class ModelBase
         return fetch_all.last || 0
     end
 
+    def fetch_filter_colum(colum)
+        return fetch_all.transpose[@key_val.index(colum)]
+    end
+
     def count
         return fetch_all.length
     end

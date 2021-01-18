@@ -13,8 +13,12 @@ class ModelThread < ModelBase
 
     def post(name)
         random = Random.new
-        id = ((random.rand)*(10**8)).round
-        name = name != "" ? name : ""
-        return insert([id,name])
+        loop do
+            id = ((random.rand)*(10**8)).round
+            unless fetch_filter_colum("id").include?(id)
+                name = name != "" ? name : ""
+                return insert([id,name])
+            end
+        end
     end
 end
