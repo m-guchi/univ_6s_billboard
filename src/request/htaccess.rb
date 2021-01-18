@@ -1,6 +1,6 @@
 class Htaccess
     def initialize(path)
-        @path = path.dup # 破壊的変更(pop)あるため
+        @path = path.dup
         @htaccess = Hash.new()
         @header_hash = Hash.new()
         check_htaccess_file()
@@ -45,7 +45,7 @@ class Htaccess
         return hash["R"][1] != nil
     end
 
-    def rewrite # R
+    def rewrite
         (path, code) = hash["R"]
         if redirect?
             # 外部転送(リダイレクト)

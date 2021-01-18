@@ -1,7 +1,6 @@
 require "./src/controller.base"
-require "./data/model/article"
 
-class Article < ControllerBase
+class Redirect < ControllerBase
     def initialize(method, param, message_body)
         super
         self.location = "/"
