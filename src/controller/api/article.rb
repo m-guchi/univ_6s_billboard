@@ -41,13 +41,13 @@ class ApiArticle < ControllerBase
             }
             return 0
         end
-        if @param.include?("name")
-            @body = {
-                "ok"=>true,
-                "data"=>@model.fetch_filter_name(@param["name"])
-            }
-            return 0
-        end
+        # if @param.include?("name")
+        #     @body = {
+        #         "ok"=>true,
+        #         "data"=>@model.fetch_filter_name(@param["name"])
+        #     }
+        #     return 0
+        # end
         @body = {
             "ok"=>true,
             "data"=>@model.fetch_all

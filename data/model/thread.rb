@@ -36,8 +36,10 @@ class ModelThread < ModelBase
         random = Random.new
         loop do
             id = ((random.rand)*(10**8)).round
+            unless fetch_filter_colum("id")
+                return insert([id,name])
+            end
             unless fetch_filter_colum("id").include?(id)
-                name = name != "" ? name : ""
                 return insert([id,name])
             end
         end
