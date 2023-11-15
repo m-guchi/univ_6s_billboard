@@ -1,7 +1,18 @@
 # 実行環境
 - Ruby 2.7.3
 
-「main.py」を実行することで，サーバを起動することができる．
+`main.rb` を実行することで，サーバを起動することができる．
+
+## Dockerを使用する場合
+
+コンテナの起動
+`docker-compose up -d`
+
+コンテナに入る
+`docker compose exec app bash`
+
+サーバーを起動
+`ruby main.rb`
 
 # 特徴
 ## UI
